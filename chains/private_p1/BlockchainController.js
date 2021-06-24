@@ -19,7 +19,7 @@ class BlockchainController {
         this.getStarsByOwner();
     }
 
-    // Enpoint to Get a Block by Height (GET Endpoint)
+    // Endpoint to Get a Block by Height (GET Endpoint)
     getBlockByHeight() {
         this.app.get("/block/height/:height", async (req, res) => {
             if(req.params.height) {
@@ -50,7 +50,7 @@ class BlockchainController {
                     return res.status(500).send("An error happened!");
                 }
             } else {
-                return res.status(500).send("Check the Body Parameter!");
+                return res.status(500).send("Invalid body parameter");
             }
         });
     }
@@ -74,7 +74,7 @@ class BlockchainController {
                     return res.status(500).send(error);
                 }
             } else {
-                return res.status(500).send("Check the Body Parameter!");
+                return res.status(500).send("Invalid body: verify address was sent.");
             }
         });
     }
@@ -101,6 +101,7 @@ class BlockchainController {
     getStarsByOwner() {
         this.app.get("/blocks/:address", async (req, res) => {
             if(req.params.address) {
+                console.log(req.params.address);
                 const address = req.params.address;
                 try {
                     let stars = await this.blockchain.getStarsByWalletAddress(address);
