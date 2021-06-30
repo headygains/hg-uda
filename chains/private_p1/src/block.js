@@ -72,11 +72,8 @@ class Block {
         let self = this;
         return new Promise(async (resolve, reject) => {
             let json = JSON.parse(hex2ascii(self.body));
-            if(json.data === ''){
+            if(json.data === '' || json.data === 'Genesis Block'){
                 reject('Invalid block body.')
-            }
-            if(json.data === 'Genesis Block'){
-                resolve();
             }
             resolve(json);
         });
