@@ -26,7 +26,6 @@ class BlockchainController {
             if(req.params.height) {
                 const height = parseInt(req.params.height);
                 let block = await this.blockchain.getBlockByHeight(height);
-                console.log(this.blockchain.chain);
                 if(block){
                     return res.status(200).json(block);
                 } else {
