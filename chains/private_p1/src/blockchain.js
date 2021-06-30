@@ -118,13 +118,13 @@ class Blockchain {
         return new Promise(async (resolve, reject) => {
             let t = parseInt(message.split(':')[1]);
             let ct = parseInt(new Date().getTime().toString().slice(0,-3));
-            if((ct - t) / 60000  <= 5){
-                if(bitcoinMessage.verify(message, address, signature)){
-                    resolve(self._addBlock(new BlockClass.Block({star:star,owner:address})));
-                }
-                reject('Unable to verify bitcoin message.')
+            if((ct - t) > 300){
+                reject('5 minute validation time has expired.');
             }
-            reject('5 minute validation time has expired.')
+            if(bitcoinMessage.verify(message, address, signature)){
+                resolve(self._addBlock(new BlockClass.Block({star:star,owner:address})));
+            }
+            reject('Unable to verify bitcoin message.');
         });
     }
 
@@ -170,16 +170,24 @@ class Blockchain {
      */
     getStarsByWalletAddress (address) {
         let self = this;
-        return new Promise((resolve) => {
-            let owned = self.chain.filter(async function(b){
-                let check = await b.getBData();
-                if(check !== null && check.address !== undefined){
-                    if(check.address === address){
-                        return check.star;
+        let ret = [];
+        return new Promise((resolve, reject) => {
+            try{
+                self.chain.forEach(async(block) => {
+                    let data = await block.getBData();
+                    if(data.address === address){
+                        ret.push({
+                            owner: data.address,
+                            star: data.star
+                        });
                     }
-                }
-            });
-            resolve(owned);
+                });
+                resolve(ret);
+            }catch(ex){
+                console.log(ex);
+                reject("An unexpected exception occurred.")
+            }
+
         });
     }
 

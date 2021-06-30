@@ -17,6 +17,7 @@ class BlockchainController {
         this.submitStar();
         this.getBlockByHash();
         this.getStarsByOwner();
+        this.validateBlockChain();
     }
 
     // Endpoint to Get a Block by Height (GET Endpoint)
@@ -101,25 +102,37 @@ class BlockchainController {
     getStarsByOwner() {
         this.app.get("/blocks/:address", async (req, res) => {
             if(req.params.address) {
-                console.log(req.params.address);
                 const address = req.params.address;
                 try {
-                    let stars = await this.blockchain.getStarsByWalletAddress(address);
-                    if(stars){
+                    this.blockchain.getStarsByWalletAddress(address).then(stars => {
                         return res.status(200).json(stars);
-                    } else {
-                        return res.status(404).send("Block Not Found!");
-                    }
+                    }).catch(error => {
+                        return res.status(404).send("No stars found!");
+                    });
                 } catch (error) {
-                    return res.status(500).send("An error happened!");
+                    console.log(error);
                 }
             } else {
                 return res.status(500).send("Block Not Found! Review the Parameters!");
             }
-            
+            return res.status(500).send("An unexpected error occurred.");
         });
     }
 
+    validateBlockChain(){
+        this.app.get("blocks/validate", async (req, res) => {
+            try{
+                let errors = await this.blockchain.validateChain();
+                return res.status(200).json({
+                    valid: errors.length <= 0,
+                    invalid: errors
+                });
+            }catch(ex){
+                console.log(ex);
+            }
+            return res.status(500).send("An exception was thrown while attempting to validate the blockchain.")
+        })
+    }
 }
 
 module.exports = (app, blockchainObj) => { return new BlockchainController(app, blockchainObj);}
