@@ -102,19 +102,16 @@ class BlockchainController {
         this.app.get("/blocks/:address", async (req, res) => {
             if(req.params.address) {
                 const address = req.params.address;
-                try {
-                    this.blockchain.getStarsByWalletAddress(address).then(stars => {
-                        return res.status(200).json(stars);
-                    }).catch(error => {
-                        return res.status(404).send("No stars found!");
-                    });
-                } catch (error) {
-                    console.log(error);
+                let stars = await this.blockchain.getStarsByWalletAddress(address);
+
+                if(stars !== undefined && stars !== null && stars.length > 0){
+                    return res.status(200).json(stars);
+                }else{
+                    return res.status(404).send("No stars found!");
                 }
             } else {
-                return res.status(500).send("Block Not Found! Review the Parameters!");
+                return res.status(500).send("No address parameter provided.");
             }
-            return res.status(500).send("An unexpected error occurred.");
         });
     }
 
@@ -128,9 +125,9 @@ class BlockchainController {
                 });
             }catch(ex){
                 console.log(ex);
+                return res.status(500).send("An exception was thrown while attempting to validate the blockchain.")
             }
-            return res.status(500).send("An exception was thrown while attempting to validate the blockchain.")
-        })
+        });
     }
 }
 

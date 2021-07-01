@@ -170,24 +170,31 @@ class Blockchain {
      */
     getStarsByWalletAddress (address) {
         let self = this;
-        let ret = [];
-        return new Promise((resolve, reject) => {
-            try{
-                self.chain.forEach(async(block) => {
+
+        return new Promise(async (resolve, reject) => {
+            try {
+                let blocks = await self.chain.filter(async (block) => {
                     let data = await block.getBData();
-                    if(data.address === address){
-                        ret.push({
-                            owner: data.address,
-                            star: data.star
-                        });
+                    if (data !== undefined && data !== null) {
+                        if (data.owner === address) {
+                            return true;
+                        }
                     }
+                    return false;
                 });
-                resolve(ret);
-            }catch(ex){
+                let stars = [];
+                blocks.forEach(async(b) => {
+                    let data = await b.getBData();
+                    stars.push({
+                        owner: data.owner,
+                        star: data.star
+                    });
+                });
+                resolve(stars);
+            } catch (ex) {
                 console.log(ex);
                 reject("An unexpected exception occurred.")
             }
-
         });
     }
 
@@ -199,8 +206,9 @@ class Blockchain {
      */
     validateChain() {
         let self = this;
-        let errorLog = [];
+
         return new Promise(async (resolve) => {
+            let errorLog = [];
             for(let i = 0; i <= self.chain.length - 1; i += 1){
                 if(i === 0){
                     if(!self.chain[i].validate()){
