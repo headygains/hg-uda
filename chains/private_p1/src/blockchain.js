@@ -75,7 +75,12 @@ class Blockchain {
                 block.hash = SHA256(JSON.stringify(block)).toString();
                 self.chain.push(block);
                 self.height = cHeight;
-                resolve(block);
+                if(block.validate()){
+                    resolve(block);
+                }else{
+                    reject("Block validation failed.");
+                }
+
             }catch(e){
                 reject(e);
             }
@@ -120,9 +125,11 @@ class Blockchain {
             let ct = parseInt(new Date().getTime().toString().slice(0,-3));
             if((ct - t) > 300){
                 reject('5 minute validation time has expired.');
+                return;
             }
             if(bitcoinMessage.verify(message, address, signature)){
                 resolve(self._addBlock(new BlockClass.Block({star:star,owner:address})));
+                return;
             }
             reject('Unable to verify bitcoin message.');
         });
@@ -140,6 +147,7 @@ class Blockchain {
             let matches = self.chain.filter(b => b.hash === hash);
             if(matches.length > 0 && matches.length < 2){
                 resolve(matches[0]);
+                return;
             }
             reject('The chain appears to be duplicating hashes.');
         });
@@ -170,29 +178,16 @@ class Blockchain {
      */
     getStarsByWalletAddress (address) {
         let self = this;
-
         return new Promise(async (resolve, reject) => {
             try {
-                let blocks = await self.chain.filter(async (block) => {
-                    let data = await block.getBData();
-                    if (data !== undefined && data !== null) {
-                        if (data.owner === address) {
-                            return true;
-                        }
-                    }
-                    return false;
-                });
+                // Corrected this as per recommendation in original review.
                 let stars = [];
-                blocks.forEach(async(b) => {
-                    let data = await b.getBData();
-                    stars.push({
-                        owner: data.owner,
-                        star: data.star
-                    });
-                });
+                for (const block of self.chain) {
+                    let data = await block.getBData();
+                    stars.push(data);
+                }
                 resolve(stars);
             } catch (ex) {
-                console.log(ex);
                 reject("An unexpected exception occurred.")
             }
         });

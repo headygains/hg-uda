@@ -41,14 +41,16 @@ class Block {
             // Save in auxiliary variable the current block hash
             let current = self.hash;
             // Reset hash to default to prevent contamination
-            self.hash = "";
+            self.hash = null;
             // Recalculate the hash of the Block
             let check = SHA256(JSON.stringify(self)).toString();
             // Comparing if the hashes changed
             // Returning the Block is not valid
             // Returning the Block is valid
             if(current === check){
+                self.hash = current;
                 resolve(true);
+                return;
             }
             resolve(false);
         });

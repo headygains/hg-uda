@@ -116,7 +116,7 @@ class BlockchainController {
     }
 
     validateBlockChain(){
-        this.app.get("blocks/validate", async (req, res) => {
+        this.app.get("blocks/validateChain", async (req, res) => {
             try{
                 let errors = await this.blockchain.validateChain();
                 return res.status(200).json({
@@ -124,7 +124,6 @@ class BlockchainController {
                     invalid: errors
                 });
             }catch(ex){
-                console.log(ex);
                 return res.status(500).send("An exception was thrown while attempting to validate the blockchain.")
             }
         });
