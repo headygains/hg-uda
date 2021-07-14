@@ -128,7 +128,13 @@ class Blockchain {
                 return;
             }
             if(bitcoinMessage.verify(message, address, signature)){
-                resolve(self._addBlock(new BlockClass.Block({star:star,owner:address})));
+                const b = await self._addBlock(new BlockClass.Block({star:star,owner:address}))
+                const validation = await self.validateChain();
+                if(validation.length <= 0){
+                    resolve(b);
+                    return;
+                }
+                reject(validation);
                 return;
             }
             reject('Unable to verify bitcoin message.');
