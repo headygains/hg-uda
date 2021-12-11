@@ -6,6 +6,8 @@ const App = {
   account: null,
   meta: null,
 
+  // TODO: Add Validation?
+  // TODO: Why not control the interation of star id via counter in underlying contract?
   start: async function() {
     const { web3 } = this;
 
@@ -41,7 +43,10 @@ const App = {
 
   // Implement Task 4 Modify the front end of the DAPP
   lookUp: async function (){
-    
+    const { lookUptokenIdToStarInfo } = this.meta.methods;
+    const id = document.getElementById("lookid");
+    const name = await lookUptokenIdToStarInfo.send({from: this.account});
+    App.setStatus(`Token ID: ${id} | Name: ${name}`);
   }
 
 };

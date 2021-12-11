@@ -10,18 +10,23 @@ contract StarNotary is ERC721 {
     struct Star {
         string name;
     }
-
     // Implement Task 1 Add a name and symbol properties
     // name: Is a short name to your token
     // symbol: Is a short string like 'USD' -> 'American Dollar'
-
+    string name_ = "IO Star Notary V1";
+    string symbol_ = "IOS";
 
     // mapping the Star with the Owner Address
     mapping(uint256 => Star) public tokenIdToStarInfo;
     // mapping the TokenId and price
     mapping(uint256 => uint256) public starsForSale;
 
-
+    function name() external view returns(string memory){
+        return name_;
+    }
+    function symbol() external view returns(string memory){
+        return symbol_;
+    }
     // Create Star using the Struct
     function createStar(string memory _name, uint256 _tokenId) public { // Passing the name and tokenId as a parameters
         Star memory newStar = Star(_name); // Star is an struct so we are creating a new Star
@@ -57,7 +62,7 @@ contract StarNotary is ERC721 {
     // Implement Task 1 lookUptokenIdToStarInfo
     function lookUptokenIdToStarInfo (uint _tokenId) public view returns (string memory) {
         //1. You should return the Star saved in tokenIdToStarInfo mapping
-        return tokenIdToStarInfo[_tokenId];
+        return tokenIdToStarInfo[_tokenId].name;
     }
 
     // Implement Task 1 Exchange Stars function
