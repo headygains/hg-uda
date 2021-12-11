@@ -117,5 +117,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-dapps/star_p2/.secret
+dapps/star_p2/mnemonic.secret
+dapps/star_p2/infura.secret
 
