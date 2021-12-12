@@ -14,6 +14,10 @@
     "lite-server": "2.4.0"
   },
   "dependencies": {
-    "ganache-cli": "^6.12.2"
+    "ethjs-abi": "^0.2.1",
+    "ganache-cli": "^6.12.2",
+    "solc": "^0.6.0",
+    "truffle-blockchain-utils": "0.0.10",
+    "truffle-hdwallet-provider": "^1.0.17"
   }
 }

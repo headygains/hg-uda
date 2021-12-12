@@ -118,7 +118,7 @@ After a long install, everything will work just fine!
 ParserError: Source file requires different compiler version. 
 Error: Truffle is currently using solc 0.5.16, but one or more of your contracts specify "pragma solidity >=0.X.X <0.X.X".
 ```
-**Solution:** In such a case, ensure the following in `truffle-config.js`:
+**Solution:** In such a case, ensure the following in `truffle.js`:
 ```js
 // Configure your compilers  
 compilers: {    

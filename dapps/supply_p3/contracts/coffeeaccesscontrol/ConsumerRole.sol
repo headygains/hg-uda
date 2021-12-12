@@ -1,4 +1,4 @@
-pragma solidity ^0.5.16;
+pragma solidity ^0.4.0;
 
 // Import the library 'Roles'
 import "./Roles.sol";
@@ -32,7 +32,7 @@ contract ConsumerRole {
 
   // Define a function 'addConsumer' that adds this role
   function addConsumer(address account) public onlyConsumer {
-    return _addConsumer(msg.sender);
+    return _addConsumer(account);
   }
 
   // Define a function 'renounceConsumer' to renounce this role

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.0;
 
 /// Provides basic authorization control
 contract Ownable {
@@ -27,6 +27,12 @@ contract Ownable {
     /// Check if the calling address is the owner of the contract
     function isOwner() public view returns (bool) {
         return msg.sender == origOwner;
+    }
+
+    function kill() public {
+        if (msg.sender == origOwner) {
+            selfdestruct(origOwner);
+        }
     }
 
     /// Define a function to renounce ownerhip

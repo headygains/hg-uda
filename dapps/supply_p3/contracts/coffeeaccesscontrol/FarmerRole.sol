@@ -1,5 +1,4 @@
-pragma solidity ^0.5.16;
-
+pragma solidity ^0.4.0;
 // Import the library 'Roles'
 import "./Roles.sol";
 
