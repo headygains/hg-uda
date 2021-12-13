@@ -11,3 +11,9 @@
 - dapps/supply_p3/mnemonic.secret (Wallet to use with truffle)
 - dapps/supply_p3/infura.secret (Project ID to use with infura)
 
+## UML:
+![activity diagram](images/coffee_source_activity_diagram.png)
+![sequence diagram](images/coffee_source_sequence_diagram.png)
+![state diagram](images/coffee_source_state_diagram.png)
+![class diagram](images/coffee_source_class_diagram.png)
+
