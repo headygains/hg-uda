@@ -7,7 +7,7 @@ const infura = fs.readFileSync("./infura.secret").toString().trim();
 module.exports = {
   compilers: {
     solc: {
-      version: "0.6.0"
+      version: "0.4.0"
     }
   },
   networks: {
